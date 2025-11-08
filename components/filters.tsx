@@ -29,7 +29,7 @@ export const Filters = () => {
       </Select>
 
       <Select onValueChange={setGrouping} value={grouping}>
-        <SelectTrigger className="w-40 bg-background [&>span]:flex-1">
+        <SelectTrigger className="w-36 bg-background [&>span]:flex-1">
           <GroupIcon className="size-4" />
           <SelectValue placeholder="Select grouping" />
         </SelectTrigger>

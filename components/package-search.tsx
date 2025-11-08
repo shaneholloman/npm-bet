@@ -42,6 +42,15 @@ export const PackageSearch = () => {
     setPackages(packages.filter((pkg) => pkg !== packageName));
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Backspace" && value === "" && packages.length > 0) {
+      event.preventDefault();
+      const newPackages = [...packages];
+      newPackages.pop();
+      setPackages(newPackages);
+    }
+  };
+
   const shouldShowResults = value.trim().length > 0;
 
   return (
@@ -95,6 +104,7 @@ export const PackageSearch = () => {
             className={cn(
               "flex flex-1 rounded-md bg-transparent py-2 text-sm outline-hidden placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
             )}
+            onKeyDown={handleKeyDown}
             onValueChange={setValue}
             placeholder="Search..."
             value={value}
