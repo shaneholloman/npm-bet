@@ -3,6 +3,10 @@
 import { PackageSearchIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import useSWR from "swr";
+import {
+  type NpmSearchResponse,
+  searchPackages,
+} from "@/actions/package/search";
 import { usePackages } from "@/providers/filters";
 import { Badge } from "./ui/badge";
 import {
@@ -14,41 +18,12 @@ import {
   CommandList,
 } from "./ui/command";
 
-type NpmPackage = {
-  package: {
-    name: string;
-    version: string;
-    description: string;
-    links: {
-      npm: string;
-    };
-  };
-  score: {
-    final: number;
-  };
-};
-
-type NpmSearchResponse = {
-  objects: NpmPackage[];
-  total: number;
-};
-
-const fetcher = async (url: string): Promise<NpmSearchResponse> => {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error("Failed to fetch packages");
-  }
-  return response.json();
-};
-
 export const PackageSearch = () => {
   const [value, setValue] = useState("");
   const [packages, setPackages] = usePackages();
   const { data, error } = useSWR<NpmSearchResponse>(
-    value
-      ? `https://registry.npmjs.com/-/v1/search?text=${encodeURIComponent(value)}&size=20`
-      : null,
-    fetcher,
+    value ? value : null,
+    searchPackages,
     {
       keepPreviousData: true,
       revalidateOnFocus: false,
