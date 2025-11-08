@@ -16,9 +16,40 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const title = "npm.bet";
+const description = "visualize and compare your npm package downloads.";
+const authors = [
+  { name: "Hayden Bleasel", url: "https://www.haydenbleasel.com" },
+];
+const creator = "Hayden Bleasel";
+const publisher = "Hayden Bleasel";
+const twitterHandle = "@haydenbleasel";
+
 export const metadata: Metadata = {
-  title: "npm.bet",
-  description: "visualize and compare your npm package downloads.",
+  title,
+  description,
+  authors,
+  creator,
+  formatDetection: {
+    telephone: false,
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title,
+  },
+  openGraph: {
+    title,
+    description,
+    type: "website",
+    siteName: title,
+    locale: "en_US",
+  },
+  publisher,
+  twitter: {
+    card: "summary_large_image",
+    creator: twitterHandle,
+  },
 };
 
 type RootLayoutProps = {
