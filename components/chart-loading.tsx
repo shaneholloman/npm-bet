@@ -1,6 +1,6 @@
 "use client";
 
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { AreaChart, CartesianGrid, XAxis } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartContainer,
@@ -62,12 +62,6 @@ export const ChartLoading = () => (
               />
             }
             cursor={false}
-          />
-          <Area
-            dataKey="downloads"
-            fill="url(#fillDownloads)"
-            stroke="var(--color-border)"
-            type="natural"
           />
           <ChartLegend content={<ChartLegendContent />} />
         </AreaChart>
