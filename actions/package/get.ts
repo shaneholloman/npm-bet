@@ -20,7 +20,7 @@ export const getPackageData = async (
       headers: {
         "Content-Type": "application/json",
       },
-      cache: "no-store",
+      next: { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
     }
   );
 
