@@ -85,6 +85,17 @@ export function ChartAreaInteractive({ data }: ChartAreaInteractiveProps) {
     }));
   };
 
+  const getDateRangeEnd = (startDate: string): string => {
+    const date = new Date(startDate);
+    if (grouping === "week") {
+      date.setDate(date.getDate() + 6);
+    } else if (grouping === "month") {
+      date.setMonth(date.getMonth() + 1);
+      date.setDate(date.getDate() - 1);
+    }
+    return date.toISOString().split("T")[0];
+  };
+
   const mergePackageData = () => {
     const allDates = new Set<string>();
     const packagesByDate: Record<string, Record<string, number>> = {};
@@ -104,6 +115,7 @@ export function ChartAreaInteractive({ data }: ChartAreaInteractiveProps) {
       .sort()
       .map((date) => ({
         date,
+        dateEnd: grouping === "day" ? date : getDateRangeEnd(date),
         ...packagesByDate[date],
       }));
   };
@@ -158,13 +170,23 @@ export function ChartAreaInteractive({ data }: ChartAreaInteractiveProps) {
             <ChartTooltip
               content={
                 <ChartTooltipContent
+                  className="[&_.flex.justify-between]:gap-8"
                   indicator="dot"
-                  labelFormatter={(value) =>
-                    new Date(value).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                    })
-                  }
+                  labelFormatter={(value, payload) => {
+                    if (!payload?.[0]?.payload) return value;
+                    const startDate = new Date(value);
+                    const endDate = new Date(payload[0].payload.dateEnd);
+                    const formatDate = (date: Date) =>
+                      date.toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      });
+
+                    if (grouping === "day") {
+                      return formatDate(startDate);
+                    }
+                    return `${formatDate(startDate)} - ${formatDate(endDate)}`;
+                  }}
                 />
               }
               cursor={false}
