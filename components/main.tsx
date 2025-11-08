@@ -2,6 +2,7 @@
 
 import { useAtomValue } from "jotai";
 import useSWR from "swr";
+import { getPackageData, type PackageData } from "@/actions/package/get";
 import { timeRangeAtom } from "@/providers/filters";
 import { ChartAreaInteractive } from "./chart";
 import { EmptyState } from "./empty-state";
@@ -10,36 +11,12 @@ type MainProps = {
   packageName?: string;
 };
 
-const fetcher = async (url: string) => {
-  const response = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch package data");
-  }
-
-  return response.json();
-};
-
 export const Main = ({ packageName }: MainProps) => {
   const timeRange = useAtomValue(timeRangeAtom);
 
-  const { data: packageData, error } = useSWR<{
-    start: string;
-    end: string;
-    package: string;
-    downloads: {
-      downloads: number;
-      day: string;
-    }[];
-  }>(
-    packageName
-      ? `https://api.npmjs.org/downloads/range/${timeRange}/${packageName}`
-      : null,
-    fetcher
+  const { data: packageData, error } = useSWR<PackageData>(
+    packageName ? [packageName, timeRange] : null,
+    ([pkg, range]) => getPackageData(pkg, range)
   );
 
   if (!packageName) {
