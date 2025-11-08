@@ -15,7 +15,8 @@ export const Main = ({ packageName }: MainProps) => {
 
   const { data: packageData, error } = useSWR<PackageData>(
     packageName ? [packageName, timeRange] : null,
-    ([pkg, range]) => getPackageData(pkg, range)
+    ([pkg, range]: [string, string]) =>
+      getPackageData(pkg as string, range as string)
   );
 
   if (!packageName) {

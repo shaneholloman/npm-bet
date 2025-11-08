@@ -1,5 +1,6 @@
 "use client";
 
+import { CalendarIcon, GroupIcon } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -16,7 +17,8 @@ export const Filters = () => {
   return (
     <div className="flex gap-2">
       <Select onValueChange={setTimeRange} value={timeRange}>
-        <SelectTrigger className="w-36 bg-background">
+        <SelectTrigger className="w-40 bg-background [&>span]:flex-1">
+          <CalendarIcon className="size-4" />
           <SelectValue placeholder="Select time range" />
         </SelectTrigger>
         <SelectContent>
@@ -27,7 +29,8 @@ export const Filters = () => {
       </Select>
 
       <Select onValueChange={setGrouping} value={grouping}>
-        <SelectTrigger className="w-36 bg-background">
+        <SelectTrigger className="w-40 bg-background [&>span]:flex-1">
+          <GroupIcon className="size-4" />
           <SelectValue placeholder="Select grouping" />
         </SelectTrigger>
         <SelectContent>
