@@ -1,36 +1,129 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# npm.bet
+
+A beautiful, interactive npm package download statistics visualizer built with Next.js 16, React 19, and Recharts.
+
+## Features
+
+- **Multi-package comparison** - Compare download trends across multiple npm packages simultaneously
+- **Flexible time ranges** - View data from the last week to all-time statistics
+- **Smart grouping** - Aggregate data by day, week, or month for better insights
+- **Interactive charts** - Built with Recharts for smooth, responsive visualizations
+- **Screenshot export** - Download charts as high-resolution PNG images
+- **Dark mode support** - Seamless theme switching with next-themes
+- **Real-time search** - Search and add npm packages with autocomplete
+- **Responsive design** - Works perfectly on desktop and mobile devices
+
+## Tech Stack
+
+- **Framework**: [Next.js 16](https://nextjs.org) with App Router
+- **UI Library**: [React 19](https://react.dev)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com)
+- **Charts**: [Recharts](https://recharts.org)
+- **Date Handling**: [date-fns](https://date-fns.org) with timezone support
+- **Data Fetching**: [SWR](https://swr.vercel.app)
+- **State Management**: [nuqs](https://nuqs.47ng.com) for URL state
+- **Code Quality**: [Ultracite](https://github.com/biomejs/ultracite) (Biome preset)
+- **UI Components**: Custom components built on [Radix UI](https://www.radix-ui.com)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20 or higher
+- pnpm
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clone the repository
+git clone https://github.com/haydenbleasel/npm.bet.git
+cd npm.bet
+
+# Install dependencies
+pnpm install
+
+# Run the development server
+pnpm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `pnpm dev` - Start the development server
+- `pnpm build` - Build the production application
+- `pnpm check` - Check for code quality issues
+- `pnpm fix` - Automatically fix code quality issues
 
-## Learn More
+## Usage
 
-To learn more about Next.js, take a look at the following resources:
+1. **Search for packages**: Use the search bar to find npm packages by name
+2. **Select time range**: Choose from predefined ranges (last week, month, year, 2 years, 5 years, or all-time)
+3. **Adjust grouping**: Switch between daily, weekly, or monthly aggregation
+4. **Compare packages**: Add multiple packages to compare their download trends
+5. **Export chart**: Click the camera icon to download the chart as a PNG
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+npm.bet/
+├── actions/          # Server actions for data fetching
+│   └── package/      # Package search and download data
+├── app/              # Next.js App Router pages
+├── components/       # React components
+│   ├── ui/           # Reusable UI components (Radix-based)
+│   ├── chart.tsx     # Main chart component
+│   ├── header.tsx    # Application header
+│   └── ...
+├── hooks/            # Custom React hooks
+├── lib/              # Utility functions
+└── providers/        # React context providers
+```
 
-## Deploy on Vercel
+## API Integration
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project uses the official [npm Registry API](https://github.com/npm/registry/blob/master/docs/download-counts.md) to fetch package download statistics:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Package search: `https://registry.npmjs.com/-/v1/search`
+- Download stats: `https://api.npmjs.org/downloads/range/{period}/{package}`
+
+Data is cached for 1 hour to reduce API load and improve performance.
+
+## Code Quality
+
+This project uses **Ultracite**, a zero-config Biome preset for automated code formatting and linting. Key standards include:
+
+- TypeScript strict mode with explicit types
+- React 19 best practices (ref as prop, no forwardRef)
+- Accessibility-first approach (ARIA attributes, semantic HTML)
+- Modern JavaScript/TypeScript patterns
+- No console.log or debugger statements in production
+
+Run `npx ultracite doctor` to verify your setup.
+
+## Contributing
+
+Contributions are welcome! Please follow these guidelines:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run `npx ultracite fix` to ensure code quality
+5. Commit your changes with a descriptive message
+6. Push to your branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+## License
+
+This project is open source and available under the MIT License.
+
+## Acknowledgments
+
+- npm Registry API for providing download statistics
+- Vercel for hosting and deployment
+- The React and Next.js teams for amazing frameworks
+- Radix UI for accessible component primitives
+
+---
+
+Built with ❤️ by [Hayden Bleasel](https://github.com/haydenbleasel)
