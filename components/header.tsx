@@ -1,4 +1,5 @@
 import type { PackageData } from "@/actions/package/get";
+import { GitHub } from "./github";
 import { GroupingSelector } from "./grouping-selector";
 import { Logo } from "./logo";
 import { Screenshot } from "./screenshot";
@@ -15,6 +16,7 @@ export const Header = ({ data }: HeaderProps) => (
       <TimeRangeSelector />
       <GroupingSelector />
       <Screenshot data={data} />
+      <GitHub />
     </div>
   </header>
 );
