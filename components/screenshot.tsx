@@ -12,14 +12,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 import { ChartAreaInteractive } from "./chart";
 import { Logo } from "./logo";
 
 type ScreenshotProps = {
   data?: PackageData[];
+  className?: string;
 };
 
-export function Screenshot({ data }: ScreenshotProps) {
+export function Screenshot({ data, className }: ScreenshotProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const chartRef = useRef<HTMLDivElement>(null);
@@ -52,7 +54,7 @@ export function Screenshot({ data }: ScreenshotProps) {
     <Dialog onOpenChange={setIsOpen} open={isOpen}>
       <DialogTrigger asChild>
         <Button
-          className="shadow-none"
+          className={cn("shadow-none", className)}
           disabled={!data || data.length === 0}
           size="icon"
           variant="outline"

@@ -61,7 +61,7 @@ export const PackageSearch = () => {
   const shouldShowResults = value.trim().length > 0;
 
   return (
-    <div className="-translate-x-1/2 absolute bottom-4 left-1/2 w-full max-w-md">
+    <div className="-translate-x-1/2 absolute bottom-4 left-1/2 w-full max-w-xs md:max-w-md">
       <Command className="w-full rounded-lg border">
         {shouldShowResults && (
           <CommandList>

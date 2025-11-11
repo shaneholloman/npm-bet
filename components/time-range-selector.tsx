@@ -3,6 +3,7 @@
 import { CalendarIcon } from "lucide-react";
 import { useMemo } from "react";
 import type { DateRange } from "react-day-picker";
+import { cn } from "@/lib/utils";
 import { useTimeRange } from "@/providers/filters";
 import { Button } from "./ui/button";
 import { Calendar } from "./ui/calendar";
@@ -57,7 +58,11 @@ const parseDateRangeFromString = (
   return { from, to };
 };
 
-export const TimeRangeSelector = () => {
+type TimeRangeSelectorProps = {
+  className?: string;
+};
+
+export const TimeRangeSelector = ({ className }: TimeRangeSelectorProps) => {
   const [timeRange, setTimeRange] = useTimeRange();
 
   const handleRangeSelect = (range: DateRange | undefined) => {
@@ -94,7 +99,7 @@ export const TimeRangeSelector = () => {
     <Popover>
       <PopoverTrigger asChild>
         <Button
-          className="w-64 text-left font-normal shadow-none"
+          className={cn("w-64 text-left font-normal shadow-none", className)}
           variant="outline"
         >
           <CalendarIcon className="size-4 text-muted-foreground" />

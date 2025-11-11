@@ -8,14 +8,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import { useGrouping } from "@/providers/filters";
 
-export const GroupingSelector = () => {
+type GroupingSelectorProps = {
+  className?: string;
+};
+
+export const GroupingSelector = ({ className }: GroupingSelectorProps) => {
   const [grouping, setGrouping] = useGrouping();
 
   return (
     <Select onValueChange={setGrouping} value={grouping}>
-      <SelectTrigger className="w-36 bg-background shadow-none [&>span]:flex-1">
+      <SelectTrigger
+        className={cn(
+          "w-36 bg-background shadow-none [&>span]:flex-1",
+          className
+        )}
+      >
         <GroupIcon className="size-4" />
         <SelectValue placeholder="Select grouping" />
       </SelectTrigger>
