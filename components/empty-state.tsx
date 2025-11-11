@@ -47,6 +47,14 @@ const examples = [
     label: "Radix UI vs Base UI",
     packages: ["radix-ui", "@base-ui-components/react"],
   },
+  {
+    label: "Svelte vs Solid vs Remix",
+    packages: ["svelte", "solid-js", "@remix-run/router"],
+  },
+  {
+    label: "Zod vs Valibot",
+    packages: ["zod", "valibot"],
+  },
 ];
 
 export const EmptyState = () => {
