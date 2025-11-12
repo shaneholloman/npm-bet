@@ -1,5 +1,10 @@
 "use server";
 
+import { Redis } from "@upstash/redis";
+import { after } from "next/server";
+
+const redis = Redis.fromEnv();
+
 export type PackageData = {
   start: string;
   end: string;
@@ -59,19 +64,28 @@ const convertTimeRangeToAPIFormat = (timeRange: string): string => {
   }
 };
 
+const CACHE_TTL_SECONDS = 3600; // 1 hour
+
 export const getPackageData = async (
   packageName: string,
   timeRange: string
 ): Promise<PackageData> => {
   const apiTimeRange = convertTimeRangeToAPIFormat(timeRange);
+  const cacheKey = `package:${packageName}:${apiTimeRange}`;
 
+  // Try to get from cache first
+  const cached = await redis.get<PackageData>(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
+  // Cache miss - fetch from npm API
   const response = await fetch(
     `https://api.npmjs.org/downloads/range/${apiTimeRange}/${packageName}`,
     {
       headers: {
         "Content-Type": "application/json",
       },
-      next: { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
     }
   );
 
@@ -79,5 +93,12 @@ export const getPackageData = async (
     throw new Error("Failed to fetch package data");
   }
 
-  return response.json();
+  const data: PackageData = await response.json();
+
+  // Store in cache with TTL (async, after response)
+  after(() => {
+    redis.setex(cacheKey, CACHE_TTL_SECONDS, data);
+  });
+
+  return data;
 };
