@@ -1,7 +1,7 @@
 import { Button } from "./ui/button";
 
 export const GitHub = () => (
-  <Button asChild size="icon" variant="outline">
+  <Button asChild className="shadow-none" size="icon" variant="outline">
     <a
       href="https://github.com/haydenbleasel/npm.bet"
       rel="noopener noreferrer"
