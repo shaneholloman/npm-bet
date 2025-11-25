@@ -1,6 +1,5 @@
 "use client";
 
-import { TZDate } from "@date-fns/tz";
 import {
   isSameMonth,
   isSameWeek,
@@ -9,8 +8,8 @@ import {
   startOfMonth,
   startOfWeek,
 } from "date-fns";
+import { useCallback, useMemo } from "react";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
-
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartContainer,
@@ -19,7 +18,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useGrouping, useRemoveCurrentPeriod } from "@/providers/filters";
+import { useGrouping } from "@/providers/filters";
 
 export const description = "An interactive line chart";
 
@@ -43,68 +42,74 @@ type ChartAreaInteractiveProps = {
   }[];
 };
 
-export function ChartAreaInteractive({ data }: ChartAreaInteractiveProps) {
+export const ChartAreaInteractive = ({ data }: ChartAreaInteractiveProps) => {
   const [grouping] = useGrouping();
-  const [removeCurrentPeriod] = useRemoveCurrentPeriod();
+  const removeCurrentPeriod = true;
 
-  const getWeekStart = (date: Date): string => {
+  const getWeekStart = useCallback((date: Date): string => {
     const weekStart = startOfWeek(date, { weekStartsOn: 0 });
     return weekStart.toISOString().split("T")[0];
-  };
+  }, []);
 
-  const getMonthStart = (date: Date): string => {
+  const getMonthStart = useCallback((date: Date): string => {
     const monthStart = startOfMonth(date);
     return monthStart.toISOString().split("T")[0];
-  };
+  }, []);
 
-  const groupData = (
-    downloads: { downloads: number; day: string }[],
-    groupBy: string
-  ): { date: string; downloads: number }[] => {
-    if (groupBy === "day") {
-      return downloads.map((item) => ({
-        date: item.day,
-        downloads: item.downloads,
-      }));
-    }
-
-    const getGroupKey = (date: Date): string => {
-      if (groupBy === "week") {
-        return getWeekStart(date);
+  const groupData = useCallback(
+    (
+      downloads: { downloads: number; day: string }[],
+      groupBy: string
+    ): { date: string; downloads: number }[] => {
+      if (groupBy === "day") {
+        return downloads.map((item) => ({
+          date: item.day,
+          downloads: item.downloads,
+        }));
       }
-      return getMonthStart(date);
-    };
 
-    const grouped = downloads.reduce(
-      (acc, item) => {
-        const groupKey = getGroupKey(new Date(item.day));
-        if (!acc[groupKey]) {
-          acc[groupKey] = 0;
+      const getGroupKey = (date: Date): string => {
+        if (groupBy === "week") {
+          return getWeekStart(date);
         }
-        acc[groupKey] += item.downloads;
-        return acc;
-      },
-      {} as Record<string, number>
-    );
+        return getMonthStart(date);
+      };
 
-    return Object.entries(grouped).map(([date, downloadCount]) => ({
-      date,
-      downloads: downloadCount,
-    }));
-  };
+      const grouped = downloads.reduce(
+        (acc, item) => {
+          const groupKey = getGroupKey(new Date(item.day));
+          if (!acc[groupKey]) {
+            acc[groupKey] = 0;
+          }
+          acc[groupKey] += item.downloads;
+          return acc;
+        },
+        {} as Record<string, number>
+      );
 
-  const getDateRangeEnd = (startDate: string): string => {
-    const date = new Date(startDate);
-    if (grouping === "week") {
-      date.setDate(date.getDate() + 6);
-    } else if (grouping === "month") {
-      date.setMonth(date.getMonth() + 1);
-      date.setDate(date.getDate() - 1);
-    }
-    return date.toISOString().split("T")[0];
-  };
+      return Object.entries(grouped).map(([date, downloadCount]) => ({
+        date,
+        downloads: downloadCount,
+      }));
+    },
+    [getWeekStart, getMonthStart]
+  );
 
-  const mergePackageData = () => {
+  const getDateRangeEnd = useCallback(
+    (startDate: string): string => {
+      const date = new Date(startDate);
+      if (grouping === "week") {
+        date.setDate(date.getDate() + 6);
+      } else if (grouping === "month") {
+        date.setMonth(date.getMonth() + 1);
+        date.setDate(date.getDate() - 1);
+      }
+      return date.toISOString().split("T")[0];
+    },
+    [grouping]
+  );
+
+  const chartData = useMemo(() => {
     const allDates = new Set<string>();
     const packagesByDate: Record<string, Record<string, number>> = {};
 
@@ -131,7 +136,7 @@ export function ChartAreaInteractive({ data }: ChartAreaInteractiveProps) {
       }
 
       const lastDate = parseISO(lastDateString);
-      const now = new TZDate(new Date(), "UTC");
+      const now = new Date();
       let shouldRemove = false;
 
       if (grouping === "day") {
@@ -155,9 +160,7 @@ export function ChartAreaInteractive({ data }: ChartAreaInteractiveProps) {
       dateEnd: grouping === "day" ? date : getDateRangeEnd(date),
       ...packagesByDate[date],
     }));
-  };
-
-  const chartData = mergePackageData();
+  }, [data, grouping, groupData, getDateRangeEnd]);
 
   const chartConfig = data.reduce(
     (acc, pkg, index) => {
@@ -259,4 +262,4 @@ export function ChartAreaInteractive({ data }: ChartAreaInteractiveProps) {
       </CardContent>
     </Card>
   );
-}
+};

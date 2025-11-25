@@ -3,12 +3,7 @@
 import { useEffect } from "react";
 import useSWR from "swr";
 import { getPackageData, type PackageData } from "@/actions/package/get";
-import {
-  useGrouping,
-  usePackages,
-  useRemoveCurrentPeriod,
-  useTimeRange,
-} from "@/providers/filters";
+import { useGrouping, usePackages, useTimeRange } from "@/providers/filters";
 import { ChartAreaInteractive } from "./chart";
 import { ChartLoading } from "./chart-loading";
 import { EmptyState } from "./empty-state";
@@ -18,7 +13,6 @@ export const Main = () => {
   const [timeRange] = useTimeRange();
   const [packages] = usePackages();
   const [grouping] = useGrouping();
-  const [removeCurrentPeriod] = useRemoveCurrentPeriod();
 
   const { data: packageData, error } = useSWR<PackageData[]>(
     packages.length > 0 ? [packages, timeRange] : null,
@@ -37,7 +31,7 @@ export const Main = () => {
         .querySelector("meta[property='og:image']")
         ?.setAttribute(
           "content",
-          `${window.location.origin}/og?q=${packages.join(",")}&timeRange=${timeRange}&grouping=${grouping}&removeCurrentPeriod=${removeCurrentPeriod}`
+          `${window.location.origin}/og?q=${packages.join(",")}&timeRange=${timeRange}&grouping=${grouping}`
         );
     } else {
       document.title = "npm.bet";
@@ -45,7 +39,7 @@ export const Main = () => {
         .querySelector("meta[property='og:image']")
         ?.setAttribute("content", `${window.location.origin}/og`);
     }
-  }, [packages, timeRange, grouping, removeCurrentPeriod]);
+  }, [packages, timeRange, grouping]);
 
   if (packages.length === 0) {
     return (

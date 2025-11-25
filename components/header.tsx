@@ -17,9 +17,7 @@ import { usePackages, useTimeRange } from "@/providers/filters";
 import { GitHub } from "./github";
 import { GroupingSelector } from "./grouping-selector";
 import { Logo } from "./logo";
-import { RemoveCurrentPeriod } from "./remove-current-period";
 import { Screenshot } from "./screenshot";
-import { Settings } from "./settings";
 import { ThemeToggle } from "./theme-toggle";
 import { TimeRangeSelector } from "./time-range-selector";
 import { Button } from "./ui/button";
@@ -58,7 +56,6 @@ export const Header = () => {
                 <div className="space-y-2 p-4 pb-0">
                   <TimeRangeSelector className="w-full" />
                   <GroupingSelector className="w-full" />
-                  <RemoveCurrentPeriod />
                 </div>
                 <DrawerFooter>
                   <DrawerClose asChild>
@@ -72,7 +69,6 @@ export const Header = () => {
         </ButtonGroup>
 
         <ButtonGroup className="hidden sm:flex">
-          <Settings />
           <Screenshot data={data} />
           <ThemeToggle />
         </ButtonGroup>

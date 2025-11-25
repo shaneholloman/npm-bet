@@ -1,4 +1,3 @@
-import { TZDate } from "@date-fns/tz";
 import {
   isSameMonth,
   isSameWeek,
@@ -141,7 +140,7 @@ const removeCurrentPeriodFromData = (
   }
 
   const lastDate = parseISO(lastDateString);
-  const now = new TZDate(new Date(), "UTC");
+  const now = new Date();
   let shouldRemove = false;
 
   if (grouping === "day") {
