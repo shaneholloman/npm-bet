@@ -32,10 +32,10 @@ const loadGoogleFont = async (font: string, text: string, weights: string) => {
 // Colors for OG image (CSS variables don't work in OG images)
 const colors = ["#f54a00", "#009689", "#104e64", "#ffba00", "#fd9a00"];
 
-type Point = {
+interface Point {
   x: number;
   y: number;
-};
+}
 
 const createSvgPath = (points: Point[]): string => {
   if (points.length === 0) {

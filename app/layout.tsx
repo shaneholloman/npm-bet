@@ -60,9 +60,9 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
-type RootLayoutProps = {
+interface RootLayoutProps {
   children: ReactNode;
-};
+}
 
 const RootLayout = ({ children }: RootLayoutProps) => (
   <html lang="en" suppressHydrationWarning>

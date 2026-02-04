@@ -32,7 +32,7 @@ const colors = [
   "var(--chart-5)",
 ];
 
-type ChartAreaInteractiveProps = {
+interface ChartAreaInteractiveProps {
   data: {
     start: string;
     end: string;
@@ -42,7 +42,7 @@ type ChartAreaInteractiveProps = {
       day: string;
     }[];
   }[];
-};
+}
 
 const getDateRangeEnd = (startDate: string, grouping: string) => {
   const date = new Date(startDate);

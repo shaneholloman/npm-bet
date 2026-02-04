@@ -17,9 +17,9 @@ import { cn } from "@/lib/utils";
 import { ChartAreaInteractive } from "./chart";
 import { Logo } from "./logo";
 
-type ScreenshotProps = {
+interface ScreenshotProps {
   data?: PackageData[];
-};
+}
 
 const colors = [
   "var(--color-secondary)",

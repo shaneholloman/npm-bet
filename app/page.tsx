@@ -3,13 +3,13 @@ import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Main } from "@/components/main";
 
-type HomeProps = {
+interface HomeProps {
   searchParams: Promise<{
     q: string;
     timeRange?: string;
     grouping?: string;
   }>;
-};
+}
 
 const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
 const baseUrl = new URL(
