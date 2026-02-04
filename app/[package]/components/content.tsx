@@ -8,15 +8,16 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useTimeRange } from "@/providers/filters";
 
 interface ContentProps {
-  packageName: string;
+  packages: string[];
 }
 
-export const Content = ({ packageName }: ContentProps) => {
+export const Content = ({ packages }: ContentProps) => {
   const [timeRange] = useTimeRange();
 
   const { data, error } = useSWR<PackageData[]>(
-    [packageName, timeRange],
-    async ([pkg, range]: [string, string]) => [await getPackageData(pkg, range)]
+    [packages, timeRange],
+    async ([pkgs, range]: [string[], string]) =>
+      Promise.all(pkgs.map((pkg) => getPackageData(pkg, range)))
   );
 
   if (error) {
@@ -28,7 +29,7 @@ export const Content = ({ packageName }: ContentProps) => {
         >
           <AlertTitle>Error loading package data</AlertTitle>
           <AlertDescription>
-            Could not find package &quot;{packageName}&quot;.
+            Could not find package &quot;{packages.join(", ")}&quot;.
           </AlertDescription>
         </Alert>
       </main>

@@ -24,15 +24,16 @@ import {
 import { useTimeRange } from "@/providers/filters";
 
 interface PackageHeaderProps {
-  packageName: string;
+  packages: string[];
 }
 
-export const PackageHeader = ({ packageName }: PackageHeaderProps) => {
+export const PackageHeader = ({ packages }: PackageHeaderProps) => {
   const [timeRange] = useTimeRange();
 
   const { data } = useSWR<PackageData[]>(
-    [packageName, timeRange],
-    async ([pkg, range]: [string, string]) => [await getPackageData(pkg, range)]
+    [packages, timeRange],
+    async ([pkgs, range]: [string[], string]) =>
+      Promise.all(pkgs.map((pkg) => getPackageData(pkg, range)))
   );
 
   return (

@@ -22,11 +22,13 @@ export const generateMetadata = async ({
   params,
   searchParams,
 }: PackagePageProps): Promise<Metadata> => {
-  const { package: packageName } = await params;
+  const { package: packageParam } = await params;
   const { timeRange, grouping } = await searchParams;
+  const packages = decodeURIComponent(packageParam).split(",");
+  const title = packages.length > 1 ? packages.join(" vs ") : packages[0];
 
   const ogUrl = new URL("/og", baseUrl);
-  ogUrl.searchParams.set("q", packageName);
+  ogUrl.searchParams.set("q", packages.join(","));
   if (timeRange) {
     ogUrl.searchParams.set("timeRange", timeRange);
   }
@@ -35,11 +37,11 @@ export const generateMetadata = async ({
   }
 
   return {
-    title: `${packageName} - npm.bet`,
-    description: `Download statistics for ${packageName} on npm`,
+    title: `${title} - npm.bet`,
+    description: `Download statistics for ${title} on npm`,
     openGraph: {
-      title: `${packageName} - npm.bet`,
-      description: `Download statistics for ${packageName} on npm`,
+      title: `${title} - npm.bet`,
+      description: `Download statistics for ${title} on npm`,
       images: [
         {
           url: ogUrl.toString(),
@@ -52,14 +54,14 @@ export const generateMetadata = async ({
 };
 
 const PackagePage = async ({ params }: PackagePageProps) => {
-  const { package: packageName } = await params;
-  const decodedPackage = decodeURIComponent(packageName);
+  const { package: packageParam } = await params;
+  const packages = decodeURIComponent(packageParam).split(",");
 
   return (
     <div className="grid h-dvh grid-rows-[2rem_1fr_2rem] gap-4 overflow-hidden p-4">
-      <PackageHeader packageName={decodedPackage} />
-      <Content packageName={decodedPackage} />
-      <PackageFooter packageName={decodedPackage} />
+      <PackageHeader packages={packages} />
+      <Content packages={packages} />
+      <PackageFooter packages={packages} />
     </div>
   );
 };
